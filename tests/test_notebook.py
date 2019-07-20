@@ -3,7 +3,7 @@ import pytest
 from pathlib import Path
 
 from notebook_to_blog.notebook import Notebook
-from notebook_to_blog.cells import Cell, MarkdownCell
+from notebook_to_blog.cells import Cell, MarkdownCell, CodeCell
 from notebook_to_blog.constants import PROJECT_DIR
 
 
@@ -37,3 +37,8 @@ def test_notebook_has_cells(notebook):
 def test_notebook_has_correct_count_markdown_cells(notebook):
     markdown_cells = [c for c in notebook.cells if isinstance(c, MarkdownCell)]
     assert len(markdown_cells) == 1
+
+
+def test_notebook_has_correct_count_code_cells(notebook):
+    code_cells = [c for c in notebook.cells if isinstance(c, CodeCell)]
+    assert len(code_cells) == 2

@@ -1,6 +1,6 @@
 import json
 
-from notebook_to_blog.cells import Cell, MarkdownCell
+from notebook_to_blog.cells import Cell, MarkdownCell, CodeCell
 
 
 class Notebook:
@@ -18,6 +18,8 @@ class Notebook:
         for x in self.contents["cells"]:
             if x["cell_type"] == "markdown":
                 cell = MarkdownCell(x)
+            elif x["cell_type"] == "code":
+                cell = CodeCell(x)
             else:
                 cell = Cell(x)
             result.append(cell)
