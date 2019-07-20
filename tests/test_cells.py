@@ -19,7 +19,14 @@ def test_cell_covert_is_not_implemented(cell):
 
 class TestMarkdownCell:
     def setup_class(self):
-        self.markdown_cell = MarkdownCell(["this is\n", "\n", "markdown"])
+        contents = {
+            "cell_type": "markdown",
+            "metadata": {},
+            "source": ["this is\n", "\n", "markdown"],
+        }
+        self.markdown_cell = MarkdownCell(contents)
 
     def test_markdown_contents_is_list(self):
-        assert isinstance(self.markdown_cell.contents, list)
+        expected_keys = ["cell_type", "metadata", "source"]
+        assert isinstance(self.markdown_cell.contents, dict)
+        assert set(self.markdown_cell.contents.keys()) == set(expected_keys)
