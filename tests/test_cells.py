@@ -55,15 +55,7 @@ class TestCodeCell:
                     "text": ["[-5.  -4]\n", "[ -5  -3]\n"],
                 }
             ],
-            "source": [
-                "import numpy as np\n",
-                "\n",
-                "x = np.arange(-5, 5, .1)\n",
-                "y = 2 * x + np.random.normal(loc=0, scale=2, size=len(x))\n",
-                "\n",
-                "print(x[:5])\n",
-                "print(y[:5])",
-            ],
+            "source": ["import numpy as np\n", "\n", "x = 10"],
         }
         self.code_cell = CodeCell(contents)
 
@@ -77,3 +69,8 @@ class TestCodeCell:
         ]
         assert isinstance(self.code_cell.contents, dict)
         assert set(self.code_cell.contents.keys()) == set(expected_keys)
+
+    def test_convert_creates_string(self):
+        actual = self.code_cell.convert()
+        expected = "```import numpy as np\n\nx = 10```"
+        assert actual == expected

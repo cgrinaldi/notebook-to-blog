@@ -18,3 +18,6 @@ class MarkdownCell(Cell):
 class CodeCell(Cell):
     def __init__(self, contents):
         super().__init__(contents)
+
+    def convert(self):
+        return "```" + "".join(self.contents["source"]) + "```"
