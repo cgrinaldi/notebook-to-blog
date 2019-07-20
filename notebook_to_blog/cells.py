@@ -4,3 +4,8 @@ class Cell:
 
     def convert(self):
         raise NotImplementedError("Cell should be subclassed.")
+
+
+class MarkdownCell(Cell):
+    def __init__(self, contents):
+        super().__init__(contents)
