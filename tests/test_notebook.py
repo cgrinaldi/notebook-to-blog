@@ -1,15 +1,25 @@
 import pytest
 
+from pathlib import Path
+
 from notebook_to_blog.notebook import Notebook
+from notebook_to_blog.constants import PROJECT_DIR
 
 
 @pytest.fixture()
 def notebook():
-    return Notebook("my-path")
+    return Notebook(PROJECT_DIR / "tests/test_notebook.ipynb")
 
 
 def test_notebook_has_path(notebook):
-    assert notebook.path == "my-path"
+    assert isinstance(notebook.path, Path)
+
+
+def test_notebook_has_contents(notebook):
+    expected_keys = ["cells", "metadata", "nbformat", "nbformat_minor"]
+
+    assert isinstance(notebook.contents, dict)
+    assert set(notebook.contents.keys()) == set(expected_keys)
 
 
 def test_notebook_converts_to_string(notebook):
