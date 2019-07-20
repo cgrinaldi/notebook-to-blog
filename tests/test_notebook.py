@@ -14,3 +14,7 @@ def test_notebook_has_path(notebook):
 
 def test_notebook_converts_to_string(notebook):
     assert isinstance(notebook.convert(), str)
+
+
+def test_notebook_has_cells(notebook):
+    assert isinstance(notebook.cells, list)
