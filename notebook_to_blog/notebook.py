@@ -1,6 +1,6 @@
 import json
 
-from notebook_to_blog.cells import Cell
+from notebook_to_blog.cells import Cell, MarkdownCell
 
 
 class Notebook:
@@ -15,8 +15,12 @@ class Notebook:
 
     def _load_cells(self):
         result = []
-        for c in self.contents["cells"]:
-            result.append(Cell(c))
+        for x in self.contents["cells"]:
+            if x["cell_type"] == "markdown":
+                cell = MarkdownCell(x)
+            else:
+                cell = Cell(x)
+            result.append(cell)
         return result
 
     def convert(self):
