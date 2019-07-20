@@ -3,6 +3,7 @@ import pytest
 from pathlib import Path
 
 from notebook_to_blog.notebook import Notebook
+from notebook_to_blog.cells import Cell
 from notebook_to_blog.constants import PROJECT_DIR
 
 
@@ -27,4 +28,7 @@ def test_notebook_converts_to_string(notebook):
 
 
 def test_notebook_has_cells(notebook):
-    assert isinstance(notebook.cells, list)
+    cells = notebook.cells
+    assert isinstance(cells, list)
+    assert isinstance(cells[0], Cell)
+    assert len(cells) == 3

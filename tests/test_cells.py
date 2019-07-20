@@ -9,7 +9,7 @@ def cell():
 
 
 def test_cell_has_contents(cell):
-    assert isinstance(cell.contents, str)
+    assert hasattr(cell, "contents")
 
 
 def test_cell_covert_is_not_implemented(cell):
