@@ -1,6 +1,7 @@
 import json
 
-from notebook_to_blog.cells import Cell, MarkdownCell, CodeCell
+from notebook_to_blog.cells import CodeCell, MarkdownCell
+from notebook_to_blog.constants import PROJECT_DIR
 
 
 class Notebook:
@@ -21,9 +22,14 @@ class Notebook:
             elif x["cell_type"] == "code":
                 cell = CodeCell(x)
             else:
-                cell = Cell(x)
+                raise TypeError("Unknown cell type.")
             result.append(cell)
         return result
 
     def convert(self):
-        return ""
+        return "\n\n".join([c.convert() for c in self.cells])
+
+
+if __name__ == "__main__":
+    notebook = Notebook(PROJECT_DIR / "tests/test_notebook.ipynb")
+    result = notebook.convert()
