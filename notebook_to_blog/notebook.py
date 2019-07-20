@@ -33,3 +33,6 @@ class Notebook:
 if __name__ == "__main__":
     notebook = Notebook(PROJECT_DIR / "tests/test_notebook.ipynb")
     result = notebook.convert()
+    import pdb
+
+    pdb.set_trace()

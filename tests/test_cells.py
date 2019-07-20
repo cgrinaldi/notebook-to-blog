@@ -33,7 +33,7 @@ class TestMarkdownCell:
 
     def test_convert_creates_string(self):
         actual = self.markdown_cell.convert()
-        expected = "this is markdown"
+        expected = "this is\n\nmarkdown"
         assert actual == expected
 
 
@@ -72,5 +72,5 @@ class TestCodeCell:
 
     def test_convert_creates_string(self):
         actual = self.code_cell.convert()
-        expected = "```import numpy as np\n\nx = 10```"
+        expected = "```\nimport numpy as np\n\nx = 10\n```"
         assert actual == expected

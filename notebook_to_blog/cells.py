@@ -11,8 +11,9 @@ class MarkdownCell(Cell):
         super().__init__(contents)
 
     def convert(self):
-        with_spaces = [" " if x == "\n" else x for x in self.contents["source"]]
-        return "".join([x.replace("\n", "") for x in with_spaces])
+        # with_spaces = [" " if x == "\n" else x for x in self.contents["source"]]
+        # return "".join([x.replace("\n", "") for x in with_spaces])
+        return "".join(self.contents["source"])
 
 
 class CodeCell(Cell):
@@ -20,4 +21,4 @@ class CodeCell(Cell):
         super().__init__(contents)
 
     def convert(self):
-        return "```" + "".join(self.contents["source"]) + "```"
+        return "```\n" + "".join(self.contents["source"]) + "\n```"
