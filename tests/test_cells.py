@@ -30,3 +30,8 @@ class TestMarkdownCell:
         expected_keys = ["cell_type", "metadata", "source"]
         assert isinstance(self.markdown_cell.contents, dict)
         assert set(self.markdown_cell.contents.keys()) == set(expected_keys)
+
+    def test_convert_creates_string(self):
+        actual = self.markdown_cell.convert()
+        expected = "this is markdown"
+        assert actual == expected

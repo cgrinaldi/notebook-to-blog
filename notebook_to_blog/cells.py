@@ -9,3 +9,7 @@ class Cell:
 class MarkdownCell(Cell):
     def __init__(self, contents):
         super().__init__(contents)
+
+    def convert(self):
+        with_spaces = [" " if x == "\n" else x for x in self.contents["source"]]
+        return "".join([x.replace("\n", "") for x in with_spaces])
