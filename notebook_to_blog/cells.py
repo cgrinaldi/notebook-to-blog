@@ -35,5 +35,7 @@ class CodeCell(Cell):
     def _convert_output(self, output):
         if output["output_type"] == "stream":
             return "```\n" + "".join(output["text"]) + "```"
+        elif output["output_type"] == "execute_result":
+            return "```\n" + "".join(output["data"]["text/plain"]) + "\n```"
         else:
             return ""

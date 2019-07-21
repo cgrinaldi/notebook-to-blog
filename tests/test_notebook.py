@@ -31,14 +31,14 @@ def test_notebook_has_cells(notebook):
     cells = notebook.cells
     assert isinstance(cells, list)
     assert isinstance(cells[0], Cell)
-    assert len(cells) == 3
+    assert len(cells) == 5
 
 
 def test_notebook_has_correct_count_markdown_cells(notebook):
     markdown_cells = [c for c in notebook.cells if isinstance(c, MarkdownCell)]
-    assert len(markdown_cells) == 1
+    assert len(markdown_cells) == 2
 
 
 def test_notebook_has_correct_count_code_cells(notebook):
     code_cells = [c for c in notebook.cells if isinstance(c, CodeCell)]
-    assert len(code_cells) == 2
+    assert len(code_cells) == 3

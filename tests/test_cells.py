@@ -39,7 +39,7 @@ class TestMarkdownCell:
 
 class TestCodeCell:
     def setup_class(self):
-        contents = {
+        self.contents = {
             "cell_type": "code",
             "execution_count": 1,
             "metadata": {
@@ -57,7 +57,7 @@ class TestCodeCell:
             ],
             "source": ["import numpy as np\n", "\n", "x = 10"],
         }
-        self.code_cell = CodeCell(contents)
+        self.code_cell = CodeCell(self.contents)
 
     def test_code_cell_contents_is_dict(self):
         expected_keys = [
@@ -74,4 +74,20 @@ class TestCodeCell:
         actual = self.code_cell.convert()
         expected = "```\nimport numpy as np\n\nx = 10\n```"
         expected += "\n\n```\n[-5.  -4]\n[ -5  -3]\n```"
+        assert actual == expected
+
+    def test_convert_creates_string_execut_result_output(self):
+        contents = {
+            "source": ["x = 10\n", "x"],
+            "outputs": [
+                {
+                    "data": {"text/plain": ["10"]},
+                    "execution_count": 2,
+                    "metadata": {},
+                    "output_type": "execute_result",
+                }
+            ],
+        }
+        actual = CodeCell(contents).convert()
+        expected = "```\nx = 10\nx\n```" + "\n\n```\n10\n```"
         assert actual == expected
