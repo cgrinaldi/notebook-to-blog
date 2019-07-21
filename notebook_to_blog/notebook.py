@@ -12,19 +12,19 @@ class Notebook:
         with open(path, "r") as f:
             self.contents = json.loads(f.read())
 
-        self.cells = self._load_cells()
+        self._load_cells()
 
     def _load_cells(self):
-        result = []
-        for x in self.contents["cells"]:
+        self.cells = []
+        for i, x in enumerate(self.contents["cells"]):
             if x["cell_type"] == "markdown":
                 cell = MarkdownCell(x)
             elif x["cell_type"] == "code":
-                cell = CodeCell(x)
+                cell = CodeCell(i, x)
             else:
                 raise TypeError("Unknown cell type.")
-            result.append(cell)
-        return result
+            self.cells.append(cell)
+        return self.cells
 
     def convert(self):
         return "\n\n".join([c.convert() for c in self.cells])

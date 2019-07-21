@@ -42,3 +42,9 @@ def test_notebook_has_correct_count_markdown_cells(notebook):
 def test_notebook_has_correct_count_code_cells(notebook):
     code_cells = [c for c in notebook.cells if isinstance(c, CodeCell)]
     assert len(code_cells) == 3
+
+
+def test_notebook_increments_figure_numbers(notebook):
+    for i, c in enumerate(notebook.cells):
+        if isinstance(c, CodeCell):
+            assert c.idx == i

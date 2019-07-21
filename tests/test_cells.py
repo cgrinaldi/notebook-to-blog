@@ -57,7 +57,7 @@ class TestCodeCell:
             ],
             "source": ["import numpy as np\n", "\n", "x = 10"],
         }
-        self.code_cell = CodeCell(self.contents)
+        self.code_cell = CodeCell(0, self.contents)
 
     def test_code_cell_contents_is_dict(self):
         expected_keys = [
@@ -88,7 +88,7 @@ class TestCodeCell:
                 }
             ],
         }
-        actual = CodeCell(contents).convert()
+        actual = CodeCell(0, contents).convert()
         expected = "```\nx = 10\nx\n```" + "\n\n```\n10\n```"
         assert actual == expected
 
@@ -102,6 +102,6 @@ class TestCodeCell:
                 }
             ],
         }
-        actual = CodeCell(contents).convert()
-        expected = "```\nplt.scatter(x, y)\n```" + "\n\n" + "<INSERT IMG_01>"
+        actual = CodeCell(10, contents).convert()
+        expected = "```\nplt.scatter(x, y)\n```" + "\n\n" + "<INSERT IMG_10>"
         assert actual == expected

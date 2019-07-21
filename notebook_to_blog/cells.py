@@ -17,8 +17,9 @@ class MarkdownCell(Cell):
 
 
 class CodeCell(Cell):
-    def __init__(self, contents):
+    def __init__(self, idx, contents):
         super().__init__(contents)
+        self.idx = idx
 
     def convert(self):
         return self._convert_source() + "\n\n" + self._convert_outputs()
@@ -38,6 +39,6 @@ class CodeCell(Cell):
         elif output["output_type"] == "execute_result":
             return "```\n" + "".join(output["data"]["text/plain"]) + "\n```"
         elif output["output_type"] == "display_data":
-            return "<INSERT IMG_01>"
+            return f"<INSERT IMG_{self.idx}>"
         else:
             return
