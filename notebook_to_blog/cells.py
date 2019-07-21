@@ -21,4 +21,19 @@ class CodeCell(Cell):
         super().__init__(contents)
 
     def convert(self):
+        return self._convert_source() + "\n\n" + self._convert_outputs()
+
+    def _convert_source(self):
         return "```\n" + "".join(self.contents["source"]) + "\n```"
+
+    def _convert_outputs(self):
+        result = []
+        for o in self.contents["outputs"]:
+            result += self._convert_output(o)
+        return "".join(result)
+
+    def _convert_output(self, output):
+        if output["output_type"] == "stream":
+            return "```\n" + "".join(output["text"]) + "```"
+        else:
+            return ""

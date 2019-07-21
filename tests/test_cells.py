@@ -70,7 +70,8 @@ class TestCodeCell:
         assert isinstance(self.code_cell.contents, dict)
         assert set(self.code_cell.contents.keys()) == set(expected_keys)
 
-    def test_convert_creates_string(self):
+    def test_convert_creates_string_stream_output(self):
         actual = self.code_cell.convert()
         expected = "```\nimport numpy as np\n\nx = 10\n```"
+        expected += "\n\n```\n[-5.  -4]\n[ -5  -3]\n```"
         assert actual == expected
