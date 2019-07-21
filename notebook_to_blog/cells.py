@@ -30,8 +30,8 @@ class CodeCell(Cell):
     def _convert_outputs(self):
         result = []
         for o in self.contents["outputs"]:
-            result += self._convert_output(o)
-        return "".join(result)
+            result.append(self._convert_output(o))
+        return "\n\n".join(result)
 
     def _convert_output(self, output):
         if output["output_type"] == "stream":
