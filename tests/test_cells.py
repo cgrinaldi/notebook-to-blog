@@ -76,7 +76,7 @@ class TestCodeCell:
         expected += "\n\n```\n[-5.  -4]\n[ -5  -3]\n```"
         assert actual == expected
 
-    def test_convert_creates_string_execut_result_output(self):
+    def test_convert_creates_string_execute_result_output(self):
         contents = {
             "source": ["x = 10\n", "x"],
             "outputs": [
@@ -90,4 +90,18 @@ class TestCodeCell:
         }
         actual = CodeCell(contents).convert()
         expected = "```\nx = 10\nx\n```" + "\n\n```\n10\n```"
+        assert actual == expected
+
+    def test_convert_creates_string_display_data_output(self):
+        contents = {
+            "source": ["plt.scatter(x, y)"],
+            "outputs": [
+                {
+                    "data": {"image/png": "<base64 encoded img>"},
+                    "output_type": "display_data",
+                }
+            ],
+        }
+        actual = CodeCell(contents).convert()
+        expected = "```\nplt.scatter(x, y)\n```" + "\n\n" + "<INSERT IMG_01>"
         assert actual == expected

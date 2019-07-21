@@ -37,5 +37,7 @@ class CodeCell(Cell):
             return "```\n" + "".join(output["text"]) + "```"
         elif output["output_type"] == "execute_result":
             return "```\n" + "".join(output["data"]["text/plain"]) + "\n```"
+        elif output["output_type"] == "display_data":
+            return "<INSERT IMG_01>"
         else:
-            return ""
+            return
