@@ -58,6 +58,6 @@ class CodeCell(Cell):
         # TODO: Save images to file system (in a figures directory)
         elif output["output_type"] == "display_data":
             save_image(output["data"]["image/png"], self.idx, self.output_dir)
-            return f"<INSERT img_{self.idx}.png>"
+            return f"<INSERT img_{self.idx:02d}.png>"
         else:
             return

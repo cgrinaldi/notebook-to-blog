@@ -105,6 +105,6 @@ class TestCodeCell:
                 }
             ],
         }
-        actual = CodeCell(10, contents).convert()
-        expected = "```\nplt.scatter(x, y)\n```" + "\n\n" + "<INSERT img_10.png>"
+        actual = CodeCell(9, contents).convert()
+        expected = "```\nplt.scatter(x, y)\n```" + "\n\n" + "<INSERT img_09.png>"
         assert actual == expected
