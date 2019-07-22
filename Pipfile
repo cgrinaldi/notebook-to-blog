@@ -10,6 +10,7 @@ mypy = "*"
 
 [packages]
 click = "*"
+pygithub = "*"
 
 [scripts]
 test = "pipenv run pytest"
