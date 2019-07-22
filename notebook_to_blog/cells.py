@@ -1,3 +1,19 @@
+import base64
+
+
+def save_image(img_data, img_num, output_dir=None):
+    """Save image base64 data as image with suffix {img_num}."""
+    if output_dir:
+        # setup the image directory
+        img_dir = output_dir / "images/"
+        img_dir.mkdir(parents=True, exist_ok=True)
+
+        # save image file to image dir
+        filepath = img_dir / f"image_{img_num}.png"
+        with open(filepath, "wb") as f:
+            f.write(base64.decodebytes(bytes(img_data, "utf-8")))
+
+
 class Cell:
     def __init__(self, contents):
         self.contents = contents
@@ -17,9 +33,10 @@ class MarkdownCell(Cell):
 
 
 class CodeCell(Cell):
-    def __init__(self, idx, contents):
+    def __init__(self, idx, contents, output_dir=None):
         super().__init__(contents)
         self.idx = idx
+        self.output_dir = output_dir
 
     def convert(self):
         return self._convert_source() + "\n\n" + self._convert_outputs()
@@ -38,7 +55,9 @@ class CodeCell(Cell):
             return "```\n" + "".join(output["text"]) + "```"
         elif output["output_type"] == "execute_result":
             return "```\n" + "".join(output["data"]["text/plain"]) + "\n```"
+        # TODO: Save images to file system (in a figures directory)
         elif output["output_type"] == "display_data":
-            return f"<INSERT IMG_{self.idx}>"
+            save_image(output["data"]["image/png"], self.idx, self.output_dir)
+            return f"<INSERT img_{self.idx:02d}.png>"
         else:
             return

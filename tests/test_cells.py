@@ -59,6 +59,9 @@ class TestCodeCell:
         }
         self.code_cell = CodeCell(0, self.contents)
 
+    def test_code_cell_has_outputdir(self):
+        assert hasattr(self.code_cell, "output_dir")
+
     def test_code_cell_contents_is_dict(self):
         expected_keys = [
             "cell_type",
@@ -102,6 +105,6 @@ class TestCodeCell:
                 }
             ],
         }
-        actual = CodeCell(10, contents).convert()
-        expected = "```\nplt.scatter(x, y)\n```" + "\n\n" + "<INSERT IMG_10>"
+        actual = CodeCell(9, contents).convert()
+        expected = "```\nplt.scatter(x, y)\n```" + "\n\n" + "<INSERT img_09.png>"
         assert actual == expected

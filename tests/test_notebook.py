@@ -1,3 +1,5 @@
+import glob
+import os
 import pytest
 
 from pathlib import Path
@@ -6,10 +8,34 @@ from notebook_to_blog.notebook import Notebook
 from notebook_to_blog.cells import Cell, MarkdownCell, CodeCell
 from notebook_to_blog.constants import PROJECT_DIR
 
+OUTPUT_DIR = PROJECT_DIR / "tests/output/"
+IMG_DIR = OUTPUT_DIR / "images"
+
+
+def setup_module():
+    OUTPUT_DIR.mkdir()
+    IMG_DIR.mkdir()
+
+
+def teardown_module():
+    # remove all images
+    for f in glob.glob(str(IMG_DIR) + "/*"):
+        os.remove(f)
+
+    # remove image directory
+    IMG_DIR.rmdir()
+
+    # remove other files
+    for f in glob.glob(str(OUTPUT_DIR) + "/*"):
+        os.remove(f)
+
+    # remove test output directory
+    OUTPUT_DIR.rmdir()
+
 
 @pytest.fixture()
 def notebook():
-    return Notebook(PROJECT_DIR / "tests/test_notebook.ipynb")
+    return Notebook(PROJECT_DIR / "tests/test_notebook.ipynb", OUTPUT_DIR)
 
 
 def test_notebook_has_path(notebook):
@@ -21,6 +47,11 @@ def test_notebook_has_contents(notebook):
 
     assert isinstance(notebook.contents, dict)
     assert set(notebook.contents.keys()) == set(expected_keys)
+
+
+def test_notebook_has_output_dir(notebook):
+    assert hasattr(notebook, "output_dir")
+    assert isinstance(notebook.output_dir, Path)
 
 
 def test_notebook_converts_to_string(notebook):
@@ -48,3 +79,12 @@ def test_notebook_increments_figure_numbers(notebook):
     for i, c in enumerate(notebook.cells):
         if isinstance(c, CodeCell):
             assert c.idx == i
+
+
+def test_notebook_writes_image(notebook):
+    # converting the notebook should have side effect of writing images
+    notebook.convert()
+
+    # check that images have been written
+    images = glob.glob(str(IMG_DIR) + "/*.png")
+    assert len(images) > 0
