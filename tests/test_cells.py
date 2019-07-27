@@ -1,6 +1,9 @@
 import pytest
+from unittest import mock
 
 from notebook_to_blog.cells import Cell, MarkdownCell, CodeCell
+
+GITHUB_URL = "https://gist.github.com/cgrinaldi"
 
 
 @pytest.fixture
@@ -73,13 +76,15 @@ class TestCodeCell:
         assert isinstance(self.code_cell.contents, dict)
         assert set(self.code_cell.contents.keys()) == set(expected_keys)
 
-    def test_convert_creates_string_stream_output(self):
+    @mock.patch("notebook_to_blog.cells.create_gist", return_value="a_uuid")
+    def test_convert_creates_string_stream_output(self, _):
         actual = self.code_cell.convert()
-        expected = "```\nimport numpy as np\n\nx = 10\n```"
+        expected = f"{GITHUB_URL}/a_uuid"
         expected += "\n\n```\n[-5.  -4]\n[ -5  -3]\n```"
         assert actual == expected
 
-    def test_convert_creates_string_execute_result_output(self):
+    @mock.patch("notebook_to_blog.cells.create_gist", return_value="a_uuid")
+    def test_convert_creates_string_execute_result_output(self, _):
         contents = {
             "source": ["x = 10\n", "x"],
             "outputs": [
@@ -92,10 +97,11 @@ class TestCodeCell:
             ],
         }
         actual = CodeCell(0, contents).convert()
-        expected = "```\nx = 10\nx\n```" + "\n\n```\n10\n```"
+        expected = f"{GITHUB_URL}/a_uuid" + "\n\n```\n10\n```"
         assert actual == expected
 
-    def test_convert_creates_string_display_data_output(self):
+    @mock.patch("notebook_to_blog.cells.create_gist", return_value="a_uuid")
+    def test_convert_creates_string_display_data_output(self, _):
         contents = {
             "source": ["plt.scatter(x, y)"],
             "outputs": [
@@ -106,5 +112,5 @@ class TestCodeCell:
             ],
         }
         actual = CodeCell(9, contents).convert()
-        expected = "```\nplt.scatter(x, y)\n```" + "\n\n" + "<INSERT img_09.png>"
+        expected = f"{GITHUB_URL}/a_uuid" + "\n\n" + "<INSERT img_09.png>"
         assert actual == expected

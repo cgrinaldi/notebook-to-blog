@@ -5,9 +5,10 @@ from notebook_to_blog.constants import PROJECT_DIR
 
 
 class Notebook:
-    def __init__(self, path, output_dir=None):
+    def __init__(self, path, output_dir=None, gh_cred_filepath=None):
         self.path = path
         self.output_dir = output_dir
+        self.gh_cred_filepath = gh_cred_filepath
 
         # load notebook and convert into dictionary
         with open(path, "r") as f:
@@ -21,7 +22,7 @@ class Notebook:
             if x["cell_type"] == "markdown":
                 cell = MarkdownCell(x)
             elif x["cell_type"] == "code":
-                cell = CodeCell(i, x, self.output_dir)
+                cell = CodeCell(i, x, self.output_dir, self.gh_cred_filepath)
             else:
                 raise TypeError("Unknown cell type.")
             self.cells.append(cell)

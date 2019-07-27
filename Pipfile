@@ -11,6 +11,7 @@ mypy = "*"
 [packages]
 click = "*"
 pygithub = "*"
+python-dotenv = "*"
 
 [scripts]
 test = "pipenv run pytest"

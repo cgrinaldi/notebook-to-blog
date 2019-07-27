@@ -1,5 +1,7 @@
 import base64
 
+from notebook_to_blog.gist import create_gist
+
 
 def save_image(img_data, img_num, output_dir=None):
     """Save image base64 data as image with suffix {img_num}."""
@@ -33,16 +35,21 @@ class MarkdownCell(Cell):
 
 
 class CodeCell(Cell):
-    def __init__(self, idx, contents, output_dir=None):
+    def __init__(self, idx, contents, output_dir=None, gh_cred_filepath=None):
         super().__init__(contents)
         self.idx = idx
         self.output_dir = output_dir
+        self.gh_cred_filepath = gh_cred_filepath
 
     def convert(self):
         return self._convert_source() + "\n\n" + self._convert_outputs()
 
     def _convert_source(self):
-        return "```\n" + "".join(self.contents["source"]) + "\n```"
+        gist_id = create_gist("".join(self.contents["source"]), self.gh_cred_filepath)
+        # TODO: Remove cgrinaldi - should pass in credentials rather than path
+        return f"https://gist.github.com/cgrinaldi/{gist_id}"
+
+        # return "```\n" + "".join(self.contents["source"]) + "\n```"
 
     def _convert_outputs(self):
         result = []
