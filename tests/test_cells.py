@@ -1,9 +1,8 @@
 import pytest
-from unittest import mock
-
 from notebook_to_blog.cells import Cell, MarkdownCell, CodeCell
 
-GITHUB_URL = "https://gist.github.com/cgrinaldi"
+GH_USERNAME = "abc"
+GITHUB_URL = f"https://gist.github.com/{GH_USERNAME}"
 
 
 @pytest.fixture
@@ -60,7 +59,9 @@ class TestCodeCell:
             ],
             "source": ["import numpy as np\n", "\n", "x = 10"],
         }
-        self.code_cell = CodeCell(0, self.contents)
+        self.code_cell = CodeCell(
+            0, self.contents, gh_creds={"username": GH_USERNAME, "password": "123"}
+        )
 
     def test_code_cell_has_outputdir(self):
         assert hasattr(self.code_cell, "output_dir")
@@ -76,15 +77,13 @@ class TestCodeCell:
         assert isinstance(self.code_cell.contents, dict)
         assert set(self.code_cell.contents.keys()) == set(expected_keys)
 
-    @mock.patch("notebook_to_blog.cells.create_gist", return_value="a_uuid")
-    def test_convert_creates_string_stream_output(self, _):
+    def test_convert_creates_string_stream_output(self):
         actual = self.code_cell.convert()
         expected = f"{GITHUB_URL}/a_uuid"
         expected += "\n\n```\n[-5.  -4]\n[ -5  -3]\n```"
         assert actual == expected
 
-    @mock.patch("notebook_to_blog.cells.create_gist", return_value="a_uuid")
-    def test_convert_creates_string_execute_result_output(self, _):
+    def test_convert_creates_string_execute_result_output(self):
         contents = {
             "source": ["x = 10\n", "x"],
             "outputs": [
@@ -96,12 +95,13 @@ class TestCodeCell:
                 }
             ],
         }
-        actual = CodeCell(0, contents).convert()
+        actual = CodeCell(
+            0, contents, gh_creds={"username": GH_USERNAME, "password": "123"}
+        ).convert()
         expected = f"{GITHUB_URL}/a_uuid" + "\n\n```\n10\n```"
         assert actual == expected
 
-    @mock.patch("notebook_to_blog.cells.create_gist", return_value="a_uuid")
-    def test_convert_creates_string_display_data_output(self, _):
+    def test_convert_creates_string_display_data_output(self):
         contents = {
             "source": ["plt.scatter(x, y)"],
             "outputs": [
@@ -111,6 +111,8 @@ class TestCodeCell:
                 }
             ],
         }
-        actual = CodeCell(9, contents).convert()
+        actual = CodeCell(
+            9, contents, gh_creds={"username": GH_USERNAME, "password": "123"}
+        ).convert()
         expected = f"{GITHUB_URL}/a_uuid" + "\n\n" + "<INSERT img_09.png>"
         assert actual == expected

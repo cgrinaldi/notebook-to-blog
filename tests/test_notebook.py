@@ -35,7 +35,8 @@ def teardown_module():
 
 @pytest.fixture()
 def notebook():
-    return Notebook(PROJECT_DIR / "tests/test_notebook.ipynb", OUTPUT_DIR)
+    gh_creds = {"username": "abc", "password": "123}"}
+    return Notebook(PROJECT_DIR / "tests/test_notebook.ipynb", OUTPUT_DIR, gh_creds)
 
 
 def test_notebook_has_path(notebook):
