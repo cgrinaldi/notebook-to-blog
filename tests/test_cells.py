@@ -1,6 +1,8 @@
 import pytest
-
 from notebook_to_blog.cells import Cell, MarkdownCell, CodeCell
+
+GH_USERNAME = "abc"
+GITHUB_URL = f"https://gist.github.com/{GH_USERNAME}"
 
 
 @pytest.fixture
@@ -57,7 +59,9 @@ class TestCodeCell:
             ],
             "source": ["import numpy as np\n", "\n", "x = 10"],
         }
-        self.code_cell = CodeCell(0, self.contents)
+        self.code_cell = CodeCell(
+            0, self.contents, gh_creds={"username": GH_USERNAME, "password": "123"}
+        )
 
     def test_code_cell_has_outputdir(self):
         assert hasattr(self.code_cell, "output_dir")
@@ -75,7 +79,7 @@ class TestCodeCell:
 
     def test_convert_creates_string_stream_output(self):
         actual = self.code_cell.convert()
-        expected = "```\nimport numpy as np\n\nx = 10\n```"
+        expected = f"{GITHUB_URL}/a_uuid"
         expected += "\n\n```\n[-5.  -4]\n[ -5  -3]\n```"
         assert actual == expected
 
@@ -91,8 +95,10 @@ class TestCodeCell:
                 }
             ],
         }
-        actual = CodeCell(0, contents).convert()
-        expected = "```\nx = 10\nx\n```" + "\n\n```\n10\n```"
+        actual = CodeCell(
+            0, contents, gh_creds={"username": GH_USERNAME, "password": "123"}
+        ).convert()
+        expected = f"{GITHUB_URL}/a_uuid" + "\n\n```\n10\n```"
         assert actual == expected
 
     def test_convert_creates_string_display_data_output(self):
@@ -105,6 +111,8 @@ class TestCodeCell:
                 }
             ],
         }
-        actual = CodeCell(9, contents).convert()
-        expected = "```\nplt.scatter(x, y)\n```" + "\n\n" + "<INSERT img_09.png>"
+        actual = CodeCell(
+            9, contents, gh_creds={"username": GH_USERNAME, "password": "123"}
+        ).convert()
+        expected = f"{GITHUB_URL}/a_uuid" + "\n\n" + "<INSERT img_09.png>"
         assert actual == expected

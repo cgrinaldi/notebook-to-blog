@@ -1,5 +1,7 @@
 import base64
 
+from notebook_to_blog.gist import create_gist
+
 
 def save_image(img_data, img_num, output_dir=None):
     """Save image base64 data as image with suffix {img_num}."""
@@ -33,16 +35,20 @@ class MarkdownCell(Cell):
 
 
 class CodeCell(Cell):
-    def __init__(self, idx, contents, output_dir=None):
+    def __init__(self, idx, contents, output_dir=None, gh_creds=None):
         super().__init__(contents)
         self.idx = idx
         self.output_dir = output_dir
+        self.gh_creds = gh_creds
 
     def convert(self):
         return self._convert_source() + "\n\n" + self._convert_outputs()
 
     def _convert_source(self):
-        return "```\n" + "".join(self.contents["source"]) + "\n```"
+        gist_id = create_gist("".join(self.contents["source"]), self.gh_creds)
+        return f"https://gist.github.com/{self.gh_creds['username']}/{gist_id}"
+
+        # return "```\n" + "".join(self.contents["source"]) + "\n```"
 
     def _convert_outputs(self):
         result = []
@@ -55,7 +61,6 @@ class CodeCell(Cell):
             return "```\n" + "".join(output["text"]) + "```"
         elif output["output_type"] == "execute_result":
             return "```\n" + "".join(output["data"]["text/plain"]) + "\n```"
-        # TODO: Save images to file system (in a figures directory)
         elif output["output_type"] == "display_data":
             save_image(output["data"]["image/png"], self.idx, self.output_dir)
             return f"<INSERT img_{self.idx:02d}.png>"
