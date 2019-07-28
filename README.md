@@ -1,44 +1,44 @@
-# Python Starter
+# Notebook to Blog
 
-This is a Python project skeleton that will you get up and running quickly. It sets up the following:
-- Pre-commit Hooks ([pre-commit](https://pre-commit.com/))
-- Testing ([Pytest](https://docs.pytest.org/en/latest/))
-- Code formatting ([Black](https://github.com/python/black) and [flake8](http://flake8.pycqa.org/en/latest/))
-- Type checking ([mypy](http://mypy-lang.org/))
+## Overview
 
-Prior to every commit, the **pre-commit hooks** will run unit tests, format the code, and perform
-type checking.
+**Notebook to Blog** is a Python CLI that makes it easy to go from a Jupyter Notebook to the following outputs:
+- A .txt file containing blog text and placeholders
+- Images of plots (saved locally)
+- Github Gists
 
-## Project Setup
-This starter project assumes you are using [pipenv](https://github.com/pypa/pipenv) to manage
-virtual environments and project dependencies.
+While not completely automated, this will make it much easier to create a blog post (e.g., Medium).
 
-#### 1. Install project dependencies:
+## Instructions
+
+1. Install via `pip install notebook-to-blog`.
+2. Store your Github username/password somewhere in your filesystem:
+
 ```
-pipenv install --dev
+GITHUB_USER=<username>
+GITHUB_PASSWORD=<password>
+```
+3. Run via `notebook_to_blog <path to Jupyter notebook> <path to output directory> <path to Github credentials>`
+
+For example, running `notebook_to_blog my_notebook.ipynb output .env` will create the following files:
+
+```
+output/
+  my_notebok.txt
+  images/
+    image_00.png
 ```
 
-#### 2. Setup project to use **pre-commit**:
-```
-pipenv run pre-commit install
-```
+In addition, Github Gists will be created for each code block encountered.
 
-#### 3. Install additional project dependencies:
-```
-pipenv install [package]
-```
-Use the **--dev** flag if needed.
+**my_notebook.txt** looks like the following:
 
-#### 4. Run tests:
 ```
-make test
+Whatever you wrote in Markdown will appear as regular text. Code blocks will cause Github Gists to be created, and a link to be inserted:
+
+https://gist.github.com/cgrinaldi/1a11acbdc9006849323163e354955a31
+
+Images will also be represented as placeholder text:
+
+<INSERT img_04.png>
 ```
-Tests will be automatically run prior to every commit.
-
-## Additional Notes
-In addition to autoformatting the code via **Black** and **flake8** for each commit,
-it does the following:
-- Runs the unit tests
-- Runs mypy for type checking
-
-If you would like to disable this, edit this [file](.pre-commit-config.yaml).
