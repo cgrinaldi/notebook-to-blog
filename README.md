@@ -11,7 +11,7 @@ While not completely automated, this will make it much easier to create a blog p
 
 ## Instructions
 
-1. Install via `pip install notebook_to_blog`.
+1. Install via `pip install notebook-to-blog`.
 2. Store your Github username/password somewhere in your filesystem:
 
 ```
@@ -21,12 +21,13 @@ GITHUB_PASSWORD=<password>
 3. Run via `notebook_to_blog <path to Jupyter notebook> <path to output directory> <path to Github credentials>`
 
 For example, running `notebook_to_blog my_notebook.ipynb output .env` will create the following files:
+
 ```
 output/
   my_notebok.txt
   images/
     image_00.png
-``**
+```
 
 In addition, Github Gists will be created for each code block encountered.
 
